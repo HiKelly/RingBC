@@ -2,7 +2,7 @@ const Register = artifacts.require("Register");
 const crypto = require('crypto');
 const NodeRSA = require('node-rsa');
 var contractInstance;
-
+var register = require("../registerTest.js");
 let key = new NodeRSA({b:1024});
 var publicDer = key.exportKey('public');
 var privateDer = key.exportKey('private');

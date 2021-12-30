@@ -1,13 +1,13 @@
-//SPDX-License-Identifier: SimPL-2.0
-pragma solidity ^0.8.0;
+pragma solidity >=0.5.0 <0.6.0;
+pragma experimental ABIEncoderV2;
 import "./Register.sol";
 
-contract Task {
+contract Task{
     address payable[] workers;   // 记录workers，方便转账
     address requester;  // 记录 requester
     string title;   // 任务标题
     string descriptionOfTask;    // 任务描述
-    mapping(address => string) answerList;  // 答案列表
+    mapping(string => string) answerList;  // 答案列表
     string[] list;
     uint answerCount;   // 已完成答案数
     uint award;    // 酬金
@@ -40,15 +40,17 @@ contract Task {
         return title;
     }
 
-    function ifAnswered(address sender) public returns(bool){
+    function ifAnswered(string memory sender) public returns(bool){
         if (keccak256(bytes(answerList[sender]))  == keccak256(bytes("")))
             return true;
         return false;
     }
 
     // 回答问题
-    function answerQuestion(string memory _answer) public {
-        answerList[msg.sender] = _answer;
+    function answerQuestion(Register reg, string memory user, string memory _answer) public {
+        require(reg.isUser(user), "Must be a user!");
+        require(ifAnswered(user), "Must not submitted an answer!");
+        answerList[user] = _answer;
         list.push(_answer);
         answerCount++;
     }

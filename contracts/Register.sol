@@ -1,5 +1,4 @@
-//SPDX-License-Identifier: SimPL-2.0
-pragma solidity ^0.8.0;
+pragma solidity >=0.5.0 <0.6.0;
 pragma experimental ABIEncoderV2;
 contract Register {
     string[] users;    // 用户列表

@@ -8,8 +8,7 @@ var publicDer = key.exportKey('public');
 var privateDer = key.exportKey('private');
 var encrypted = key.encrypt("This is a secret");
 var decrypted = key.decrypt(encrypted);
-console.log("encrypted = " + encrypted.toString('base64'));
-console.log("decrypted = " + decrypted.toString());
+
 let registerInstance;
 let taskInstance;
 
@@ -52,46 +51,21 @@ contract("Task", async function(accounts){
         })
 
         it("Should submit an answer ", async () => {
-            let flag = await registerInstance.isUser.call(accounts[1]);
-            if (flag) {
-                let flag2 = await taskInstance.ifAnswered.call(accounts[1]);
-                if (flag2) {
-                    var msg = "/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme";
-                    var encrypted = key.encrypt(msg, 'base64');
-                    console.log("message length = ", msg.length);
-                    console.log("length = ", encrypted.length);
-                    let a = await taskInstance.answerQuestion(encrypted, {from:accounts[1]});
-                    //console.log("Submit answer success");
-                    console.log(a);
-                } else {
-                    console.log("The worker has submitted twice")
-                }
-            } else {
-                console.log("This worker is not a user");
-            }
-
-
+            var msg = "/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme";
+            var encrypted = key.encrypt(msg, 'base64');
+            let a = await taskInstance.answerQuestion(registerInstance.address, accounts[1], encrypted, {from:accounts[1]});
+            console.log(a);
             let count = await taskInstance.collectAnswers.call();
-            /*for (let i in count) {
+            for (let i in count) {
                 console.log(count[i]);
-            }*/
+            }
             assert.equal(count.length, 1);
         })
 
         it("Should not submit an answer ", async () => {
-
-            let flag = await registerInstance.isUser.call(accounts[2]);
-            if (flag) {
-                let flag2 = await taskInstance.ifAnswered.call(accounts[2]);
-                if (flag2) {
-                    await taskInstance.answerQuestion("This is an answer", {from:accounts[2]});
-                    console.log("Submit answer success");
-                } else {
-                    console.log("The worker has submitted twice")
-                }
-            } else {
-                console.log("This worker is not a user");
-            }
+            var msg = "/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme";
+            var encrypted = key.encrypt(msg, 'base64');
+            await taskInstance.answerQuestion(registerInstance.address, accounts[2], encrypted, {from:accounts[2]});
             let count = await taskInstance.collectAnswers.call();
             for (let i in count) {
                 console.log(count[i]);
@@ -100,18 +74,9 @@ contract("Task", async function(accounts){
         })
 
         it("Should not submit an answer twice ", async () => {
-            let flag = await registerInstance.isUser.call(accounts[1]);
-            if (flag) {
-                let flag2 = await taskInstance.ifAnswered.call(accounts[1]);
-                if (flag2) {
-                    await taskInstance.answerQuestion("This is an answer", {from:accounts[1]});
-                    console.log("Submit answer success");
-                } else {
-                    console.log("The worker has submitted twice")
-                }
-            } else {
-                console.log("This worker is not a user");
-            }
+            var msg = "/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme";
+            var encrypted = key.encrypt(msg, 'base64');
+            let a = await taskInstance.answerQuestion(registerInstance.address, accounts[1], encrypted, {from:accounts[1]});
             let count = await taskInstance.collectAnswers.call();
             for (let i in count) {
                 console.log(count[i]);
