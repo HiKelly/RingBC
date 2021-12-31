@@ -1,16 +1,5 @@
 const Register = artifacts.require("Register");
-const crypto = require('crypto');
-const NodeRSA = require('node-rsa');
 var contractInstance;
-var register = require("../registerTest.js");
-let key = new NodeRSA({b:1024});
-var publicDer = key.exportKey('public');
-var privateDer = key.exportKey('private');
-var encrypted = key.encrypt("This is a secret");
-var decrypted = key.decrypt(encrypted);
-console.log("encrypted = " + encrypted.toString('base64'));
-console.log("decrypted = " + decrypted.toString());
-
 
 contract("Register", async function(accounts){
     before(async () => {
@@ -34,10 +23,6 @@ contract("Register", async function(accounts){
             for (var i = 0; i < users.length; i++) {
                 console.log("i = " + i);
                 console.log(users[i]);
-                /*for (var key in users[i]) {
-                    console.log(key + " : " + users[i][key])
-                }
-                console.log("\n")*/
             }
         });
 
