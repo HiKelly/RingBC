@@ -1,13 +1,8 @@
 const Register = artifacts.require("Register");
 const Task = artifacts.require("Task");
-const crypto = require('crypto');
 const NodeRSA = require('node-rsa');
 
 let key = new NodeRSA({b:1024});
-var publicDer = key.exportKey('public');
-var privateDer = key.exportKey('private');
-var encrypted = key.encrypt("This is a secret");
-var decrypted = key.decrypt(encrypted);
 
 let registerInstance;
 let taskInstance;
@@ -30,7 +25,7 @@ contract("Task", async function(accounts){
         });
 
         it("Should add a task ", async () => {
-            let b = await taskInstance.addQuestion("test", "This is a test", {from:accounts[0], value:1e19});
+            let b = await taskInstance.addQuestion("test", "This is a test", 1, {from:accounts[0], value:1e19});
             console.log(b);
             let title = await taskInstance.getTitle.call();
             console.log("title = " + title);
@@ -53,35 +48,30 @@ contract("Task", async function(accounts){
         it("Should submit an answer ", async () => {
             var msg = "/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme";
             var encrypted = key.encrypt(msg, 'base64');
+            console.log(encrypted);
             let a = await taskInstance.answerQuestion(registerInstance.address, accounts[1], encrypted, {from:accounts[1]});
             console.log(a);
-            let count = await taskInstance.collectAnswers.call();
-            for (let i in count) {
-                console.log(count[i]);
-            }
-            assert.equal(count.length, 1);
         })
 
         it("Should not submit an answer ", async () => {
             var msg = "/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme";
             var encrypted = key.encrypt(msg, 'base64');
             await taskInstance.answerQuestion(registerInstance.address, accounts[2], encrypted, {from:accounts[2]});
-            let count = await taskInstance.collectAnswers.call();
-            for (let i in count) {
-                console.log(count[i]);
-            }
-            assert.equal(count.length, 1);
         })
 
         it("Should not submit an answer twice ", async () => {
             var msg = "/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme";
             var encrypted = key.encrypt(msg, 'base64');
             let a = await taskInstance.answerQuestion(registerInstance.address, accounts[1], encrypted, {from:accounts[1]});
-            let count = await taskInstance.collectAnswers.call();
-            for (let i in count) {
-                console.log(count[i]);
+        })
+
+        it("Should collect answers ", async () => {
+            //let answer0 = await taskInstance.collectAnswers.call({from:accounts[0]});
+            await taskInstance.payAward({from:accounts[0]});
+            let answer = await taskInstance.collectAnswers.call({from:accounts[0]});
+            for (var key in answer) {
+                console.log(key, " : ", answer[key]);
             }
-            assert.equal(count.length, 1);
         })
 
     })

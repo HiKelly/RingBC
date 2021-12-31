@@ -13,6 +13,7 @@ contract Task{
     uint award;    // 酬金
     uint numberOfWorkersNeeded;   // 需要完成的工人数
     uint unitAward; // 单个工人获得的酬金数
+    bool finished;  //requester是否已经获取答案
 
     modifier onlyRequester {    // 创建限定符
         require(isRequester(), "Only requester can do that!");
@@ -28,11 +29,12 @@ contract Task{
         unitAward = 0;
     }
 
-    function addQuestion(string memory _title, string memory _descriptionOfTask) payable public {
+    function addQuestion(string memory _title, string memory _descriptionOfTask, uint _numberOfWorkersNeeded) payable public {
         require(msg.value > 0 ether, "Must have award!"); // 必须预存酬金
         requester = msg.sender;
         title = _title;
         descriptionOfTask = _descriptionOfTask;
+        numberOfWorkersNeeded = _numberOfWorkersNeeded;
         award = msg.value;
     }
 
@@ -52,11 +54,23 @@ contract Task{
         require(ifAnswered(user), "Must not submitted an answer!");
         answerList[user] = _answer;
         list.push(_answer);
+        workers.push(msg.sender);
         answerCount++;
     }
 
+    function payAward() onlyRequester public {
+        require(finished == false, "You have collected the answers!");
+        require(workers.length >= numberOfWorkersNeeded, "There isn't enough number of answers!");
+        finished = true;
+        uint unitAward = award / workers.length;
+        for (uint i = 0; i < workers.length; i++) {
+            workers[i].transfer(unitAward);
+        }
+    }
+
     // 收集答案
-    function collectAnswers() onlyRequester public view returns(string[] memory) {
+    function collectAnswers() onlyRequester public returns(string[] memory) {
+        require(finished == true, "You haven't pay the awards!");
         return list;
     }
 

@@ -555,7 +555,7 @@
                                     "name": "abi",
                                     "nodeType": "Identifier",
                                     "overloadedDeclarations": [],
-                                    "referencedDeclaration": 310,
+                                    "referencedDeclaration": 384,
                                     "src": "563:3:1",
                                     "typeDescriptions": {
                                       "typeIdentifier": "t_magic_abi",
@@ -602,7 +602,7 @@
                               "name": "keccak256",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 317,
+                              "referencedDeclaration": 391,
                               "src": "553:9:1",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
@@ -658,7 +658,7 @@
                                     "name": "abi",
                                     "nodeType": "Identifier",
                                     "overloadedDeclarations": [],
-                                    "referencedDeclaration": 310,
+                                    "referencedDeclaration": 384,
                                     "src": "604:3:1",
                                     "typeDescriptions": {
                                       "typeIdentifier": "t_magic_abi",
@@ -705,7 +705,7 @@
                               "name": "keccak256",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 317,
+                              "referencedDeclaration": 391,
                               "src": "594:9:1",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
@@ -1788,7 +1788,7 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 317,
+                                          "referencedDeclaration": 391,
                                           "type": "function (bytes memory) pure returns (bytes32)",
                                           "value": "keccak256"
                                         },
@@ -1834,7 +1834,7 @@
                                                   "overloadedDeclarations": [
                                                     null
                                                   ],
-                                                  "referencedDeclaration": 310,
+                                                  "referencedDeclaration": 384,
                                                   "type": "abi",
                                                   "value": "abi"
                                                 },
@@ -1926,7 +1926,7 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 317,
+                                          "referencedDeclaration": 391,
                                           "type": "function (bytes memory) pure returns (bytes32)",
                                           "value": "keccak256"
                                         },
@@ -1972,7 +1972,7 @@
                                                   "overloadedDeclarations": [
                                                     null
                                                   ],
-                                                  "referencedDeclaration": 310,
+                                                  "referencedDeclaration": 384,
                                                   "type": "abi",
                                                   "value": "abi"
                                                 },
@@ -2123,7 +2123,7 @@
     }
   },
   "schemaVersion": "3.4.4",
-  "updatedAt": "2021-12-30T07:42:46.546Z",
+  "updatedAt": "2021-12-31T02:53:21.498Z",
   "devdoc": {
     "methods": {}
   },
