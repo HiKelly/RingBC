@@ -7,7 +7,7 @@ contract Task{
     address requester;  // 记录 requester
     string title;   // 任务标题
     string descriptionOfTask;    // 任务描述
-    mapping(string => string) answerList;  // 答案列表
+    mapping(string => bool) answerList;  // 答案列表
     string[] list;
     uint answerCount;   // 已完成答案数
     uint award;    // 酬金
@@ -43,34 +43,26 @@ contract Task{
     }
 
     function ifAnswered(string memory sender) public returns(bool){
-        if (keccak256(bytes(answerList[sender]))  == keccak256(bytes("")))
-            return true;
-        return false;
+        return answerList[sender];
     }
 
     // 回答问题
     function answerQuestion(Register reg, string memory user, string memory _answer) public {
         require(reg.isUser(user), "Must be a user!");
-        require(ifAnswered(user), "Must not submitted an answer!");
-        answerList[user] = _answer;
+        require(!ifAnswered(user), "Must not submitted an answer!");
+        answerList[user] = true;
         list.push(_answer);
-        workers.push(msg.sender);
+        payAward();
         answerCount++;
     }
 
-    function payAward() onlyRequester public {
-        require(finished == false, "You have collected the answers!");
-        require(workers.length >= numberOfWorkersNeeded, "There isn't enough number of answers!");
-        finished = true;
-        uint unitAward = award / workers.length;
-        for (uint i = 0; i < workers.length; i++) {
-            workers[i].transfer(unitAward);
-        }
+    function payAward() private {
+        msg.sender.transfer(award / numberOfWorkersNeeded);
     }
 
     // 收集答案
     function collectAnswers() onlyRequester public returns(string[] memory) {
-        require(finished == true, "You haven't pay the awards!");
+        //require(finished == true, "You haven't pay the awards!");
         return list;
     }
 
